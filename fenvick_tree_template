@@ -1,0 +1,44 @@
+#include<bits/stdc++.h>
+#define ll long long int
+using namespace std;
+class fenvick_tree{// valid for 1 based indexing
+public:
+   ll sz;
+    vector<ll> fen;
+    fenvick_tree(int n){
+        this->sz=n+1;
+        fen.resize(n+1,0);
+    }
+    void update(ll i,ll val){ // 1 based index
+        while(i<sz){
+            fen[i]+=val;
+            i+=(i&(-i));
+        }
+    }
+    ll sum(ll i){ // 1 based index
+        ll s=0;
+        while(i>0){
+            s+=fen[i];
+            i=i-(i&(-i));
+        }
+        return s;
+    }
+    ll range_sum(ll l,ll r){
+        return sum(r)-sum(l-1);
+    }
+};
+int main(){
+    ll n;
+    cin>>n;
+    ll a[n];
+    for(ll i=0;i<n;i++)cin>>a[i];// o based indexing
+    fenvick_tree f(n); // 1 based indexing
+    for(int i=0;i<n;i++){
+        f.update(i+1,a[i]);
+    }
+    cout<<f.range_sum(1,4)<<" ";
+    f.update(1,4-a[0]);
+    cout<<f.range_sum(1,4);
+
+
+}
